@@ -1,8 +1,8 @@
 original = raw_input('Enter a word:')
 word = original.lower()
 first = word[0]
-new_word = word + pyg
 pyg = 'ay'
+new_word = word + pyg
 
 """判断输入的单词是否可用，若可用按首字母类型进行处理
 """
