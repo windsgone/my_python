@@ -2,57 +2,40 @@
 
 from random import randint
 
-class BattleShip(object):
+def board(x):  # 生成边长为x的正方形游戏棋盘
+    board = []
+    for i in range(x):
+        board.append(["O"] * x)
+    return board
 
-    def __init__(self, start):
-        self.start = start
+def print_board(board):  # 打印棋盘
+    for row in board:
+        print " ".join(row)  # 优化打印格式
+    
+def random(board):  # 生成随机行数、列数
+    return randint(0, len(board) - 1), randint(0, len(board[0]) - 1)
 
-    def start_game(self):
-        print "Are you ready to play the game?"
-        check = raw_input("yes or no: ")
-        if check == "yes":
-            print_board(board)
-        else:
-            exit(0)
+def play(times):  # times为机会次数
+    map_size = int(raw_input("please confirm the map size: "))
+    game = board(map_size)
+    ship_row, ship_col = random(game)
 
-
-    start_game(print_board(board))
-
-
-    def print_board(board):                     # 生成游戏棋盘                        
-        board = []
-        for x in range(5):
-            board.append(["O"] * 5)
-        for row in board:
-            print " ".join(row)
-
-    def random_row(board):
-        return randint(0, len(board) - 1)
-
-    def random_col(board):
-        return randint(0, len(board[0]) - 1)
-
-    ship_row = random_row(board)
-    ship_col = random_col(board)
-    print ship_row
-    print ship_col
-
-    # Everything from here on should go in your for loop!
-    # Be sure to indent four spaces!
-    for turn in range(4):
+    for turn in range(times):
         guess_row = input("Guess Row:")
-        guess_col = input("Guess Col:")
-        
-        if guess_row == ship_row and guess_col == ship_col:
+        guess_col = input("Guess Col:")  # 输入猜测行列数
+
+        if guess_row == ship_row and guess_col == ship_col:  # 如果猜对游戏结束
             print "Congratulations! You sunk my battleship!"
+            break
         else:
-            if (guess_row < 0 or guess_row > 4) or (guess_col < 0 or guess_col > 4):
+            if (guess_row < 0 or guess_row > (map_size - 1)) or (guess_col < 0 or guess_col > (map_size - 1)):  # 猜测超出范围
                 print "Oops, that's not even in the ocean."
-            elif(board[guess_row][guess_col] == "X"):
+            elif(game[guess_row][guess_col] == "X"):  # 位置已猜过
                 print "You guessed that one already."
             else:
                 print "You missed my battleship!"
-            board[guess_row][guess_col] = "X"
-            # Print (turn + 1) here!
-            print turn + 1
-            print_board(board)
+                game[guess_row][guess_col] = "X"  # 已猜的位置标记为X
+            print_board(game)
+            print "You have %d times left!" % (times - turn - 1)
+
+play(2)
